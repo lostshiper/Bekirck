@@ -156,9 +156,9 @@ function update(this: Phaser.Scene) {
     const directionY = player.y - collector.y;
     const speed = 80;
     
-    collector.setVelocityX(directionX > 0 ? speed : -speed);
+    collector.body.setVelocityX(directionX > 0 ? speed : -speed);
     if (directionY < 0 && collector.body.touching.down) {
-      collector.setVelocityY(-200);
+      collector.body.setVelocityY(-200);
     }
   });
 
