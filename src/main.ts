@@ -24,8 +24,7 @@ const game = new Phaser.Game(config);
 
 // Preload game assets
 function preload(this: Phaser.Scene) {
-  // Placeholder for player sprite
-  this.load.rectangle('player', 32, 48, 0x00ff00);
+  // No assets to preload since we're using primitive shapes
 }
 
 // Create game objects
