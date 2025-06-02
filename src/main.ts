@@ -34,6 +34,7 @@ let gameTimer: number = 0;
 let ammo: number = 10;
 let spaceKey: Phaser.Input.Keyboard.Key;
 let lastShootTime: number = 0;
+let pointer: Phaser.Input.Pointer;
 
 const game = new Phaser.Game(config);
 
@@ -77,6 +78,7 @@ function create(this: Phaser.Scene) {
   // Setup keyboard input
   cursors = this.input.keyboard.createCursorKeys();
   spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+  pointer = this.input.activePointer;
 
   // Add game title and UI
   this.add.text(16, 16, 'Enflasyon Kaçkını', {
@@ -122,7 +124,24 @@ function update(this: Phaser.Scene) {
   if (spaceKey.isDown && ammo > 0 && this.time.now > lastShootTime + 500) {
     const bullet = bullets.create(player.x, player.y, 'bullet');
     if (bullet) {
-      bullet.setVelocityX(400);
+      // Calculate angle between player and mouse pointer
+      const angle = Phaser.Math.Angle.Between(
+        player.x,
+        player.y,
+        this.input.activePointer.x,
+        this.input.activePointer.y
+      );
+
+      // Set bullet velocity based on angle
+      const speed = 400;
+      bullet.setVelocity(
+        Math.cos(angle) * speed,
+        Math.sin(angle) * speed
+      );
+
+      // Rotate bullet to face direction of travel
+      bullet.setRotation(angle);
+
       ammo--;
       ammoText.setText(`Mermi: ${ammo}`);
       lastShootTime = this.time.now;
